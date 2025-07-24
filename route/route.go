@@ -18,6 +18,18 @@ func SetupRoutes(r *gin.Engine,db *gorm.DB){
 	r.POST("/admin/login",adminHandler.AdminLogin)
 	protected:=r.Group("/")
 	protected.Use(middleware.AuthMiddleware())
-	adminroutes:=r.Group("/admin")
-	adminroutes.Use(middleware.AuthMiddleware(),middleware.AdminMiddleware())
+	{
+		protected.GET("/home",adminHandler.Home)
+	}
+	adminRoutes:=r.Group("/admin")
+	adminRoutes.Use(middleware.AuthMiddleware(),middleware.AdminMiddleware())
+	
+	{
+		adminRoutes.GET("/users", adminHandler.GetUsers)
+		adminRoutes.POST("/users", adminHandler.CreateUser)
+		adminRoutes.GET("/users/:id", adminHandler.GetUser)
+		adminRoutes.PUT("/users/:id", adminHandler.UpdateUser)
+		adminRoutes.DELETE("/users/:id", adminHandler.DeleteUser)
+		
+	}
 }
